@@ -50,6 +50,9 @@ Componentes:
 3. **dynamodb\_module**  
    * **Descripción:** Configura tablas **DynamoDB**, utilizadas como base de datos NoSQL para almacenar datos de las reservas, restaurantes y mesas.  
    * **Función en la Infraestructura:** Almacena los datos de manera eficiente y escalable, permitiendo la consulta y modificación de reservas sin necesidad de gestionar servidores.
+4.**cognito\_module**
+   * **Descripción** : Configura el User Pool de AWS Cognito, utilizado para la autenticación y gestión de usuarios en la aplicación. Este módulo define el User Pool con atributos personalizados, como el atributo userType, y configura opciones como la verificación por correo electrónico, MFA opcional y ajustes de recuperación de cuenta.
+   * **Función en la Infraestructura**: El User Pool de Cognito es esencial para manejar la autenticación y autorización de usuarios en el sistema. Proporciona funcionalidades como registro, inicio de sesión, asegurando que solo usuarios autenticados puedan acceder a recursos protegidos.
 
 ### **Variables y Outputs**
 
@@ -110,6 +113,10 @@ Antes de ejecutar Terraform, asegúrate de tener lo siguiente configurado:
 3. **Configuración de AWS CLI:** Se debe configurar las credenciales de AWS utilizando  AWS CLI. Si no lo tenes instalado, descargarlo e instalarlo desde [AWS CLI](https://aws.amazon.com/cli/). Una vez instalado, ejecutar el siguiente comando para ingresar tus credenciales:  
    `aws configure`  
 4. **Instalación de Next.js:** Para instalar Next.js, hay que asegurarse de tener Node.js y npm (Node Package Manager) instalados. Puedes verificar si están instalados ejecutando `node --version` y `npm --version` en tu terminal. Si no pudiste, revisa este [link](https://nextjs.org/docs/getting-started/installation).  
+`sudo apt update && sudo apt upgrade -y`
+`sudo apt install nodejs npm -y`
+`sudo npm install -g next`
+
 5. **Clonar el Proyecto:**  
    Asegúrate de tener el repositorio del proyecto en tu entorno local. Si no lo tenes, clonarlo utilizando Git:  
    `git clone https://github.com/itba-cloud/2024Q2-G4.git`  
@@ -121,7 +128,7 @@ Seguir los pasos a continuación para desplegar la infraestructura utilizando Te
 
 ### **1\. Inicializar el Proyecto de Terraform**
 
-Este comando descarga los plugins y módulos necesarios para trabajar con los recursos de AWS.
+Este comando descarga los plugins y módulos necesarios para trabajar con los recursos de AWS. Modificar la variable `admin_email` en el `terraform.tfvars` para indicar el email que se quiere usar.
 
 `terraform init`
 
@@ -206,6 +213,7 @@ Desde el panel de administrador, seleccionar la opción "Crear Restaurante".
 
 1. Completar el formulario con los datos del restaurante (localidad, categoría y nombre).  
 2. Hacer clic en el botón **Create Restaurant** para registrar el nuevo restaurante.
+3. Una vez montada la arquitectura, deberá confirmar la suscripción a SNS en su `admin_email`. Con eso hecho, llegará un email de notificación de nuevo restaurante creado.
 
 ### **2\. Crear una Mesa**
 

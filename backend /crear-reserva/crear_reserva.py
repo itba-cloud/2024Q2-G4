@@ -215,7 +215,7 @@ def crear_reserva(event, context):
                     'Access-Control-Allow-Methods': 'OPTIONS,POST'
                 }
             }
-        
+      
         return {
             'statusCode': 200,
             'body': json.dumps(f"Reserva creada exitosamente en la mesa {table_id} para {user_name}."),

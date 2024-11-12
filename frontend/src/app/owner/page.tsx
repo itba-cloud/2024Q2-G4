@@ -7,7 +7,13 @@ interface MesaData {
     localidad: string;
     nombre_restaurant: string;
     capacidad: string;
+    id_usuario: string;
 }
+
+interface SearchData {
+    localidad: string;
+    categoria: string;
+  }
 
 interface RestaurantData {
     localidad: string;
@@ -47,6 +53,11 @@ export default function Home() {
         nombre_restaurant: ''
     });
 
+    const [searchData, setSearchData] = useState<SearchData>({
+        localidad: '',
+        categoria: ''
+      });
+
     const [result, setResult] = useState('');
     const router = useRouter();
 
@@ -80,8 +91,7 @@ export default function Home() {
                 id_usuario: decodedToken.email
             }));
 
-            setMesaData({...mesaData, id_usuario: decodedToken.email});
-
+            setMesaData(prev => ({...prev, id_usuario: decodedToken.email}));
         }
 
         if (process.env.NEXT_PUBLIC_BACKEND_URL) {
@@ -127,6 +137,34 @@ export default function Home() {
             setResult('Error: ' + (error as Error).message);
         }
     };
+
+    const handleSearch = async () => {
+        try {
+          const queryParams = new URLSearchParams();
+    
+          if (searchData.localidad) {
+            queryParams.append('localidad', searchData.localidad);
+          }
+    
+          if (searchData.categoria) {
+            queryParams.append('categoria', searchData.categoria);
+          }
+    
+          const response = await fetch(`${backendUrl}/restaurantes?${queryParams.toString()}`, {
+            headers: getAuthHeaders()
+          });
+    
+          if (response.status === 401) {
+            handleLogout();
+            return;
+          }
+    
+          const data = await response.json();
+          setResult(JSON.stringify(data, null, 2));
+        } catch (error) {
+          setResult('Error: ' + (error as Error).message);
+        }
+      };
 
     const handleCreateMesa = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -193,6 +231,39 @@ export default function Home() {
             </div>
 
             <h2 className="text-2xl font-bold mb-4">Restaurant OWNER</h2>
+            <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-2">Search Restaurants</h2>
+          <div className="space-y-2">
+            <input
+              type="text"
+              placeholder="Localidad"
+              value={searchData.localidad}
+              onChange={(e) => setSearchData({...searchData, localidad: e.target.value})}
+              className="w-full p-2 border rounded text-black"
+            />
+            <input
+              type="text"
+              placeholder="Categoría"
+              value={searchData.categoria}
+              onChange={(e) => setSearchData({...searchData, categoria: e.target.value})}
+              className="w-full p-2 border rounded text-black"
+            />
+            <button
+              onClick={handleSearch}
+              className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Search Restaurants
+            </button>
+          </div>
+        </div>
+
+        {/* Display Results */}
+        <div className="mt-8 mb-8">
+          <h2 className="text-xl font-semibold mb-2">Result</h2>
+          <pre className="bg-gray-100 p-4 rounded overflow-x-auto text-black whitespace-pre-wrap">
+          {result}
+        </pre>
+        </div>
             <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-2">Create Restaurant</h2>
                 <form onSubmit={handleCreateRestaurant} className="space-y-2">
