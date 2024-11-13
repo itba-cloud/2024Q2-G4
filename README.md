@@ -50,7 +50,7 @@ Componentes:
 3. **dynamodb\_module**  
    * **Descripción:** Configura tablas **DynamoDB**, utilizadas como base de datos NoSQL para almacenar datos de las reservas, restaurantes y mesas.  
    * **Función en la Infraestructura:** Almacena los datos de manera eficiente y escalable, permitiendo la consulta y modificación de reservas sin necesidad de gestionar servidores.
-4.**cognito\_module**
+4. **cognito\_module**
    * **Descripción** : Configura el User Pool de AWS Cognito, utilizado para la autenticación y gestión de usuarios en la aplicación. Este módulo define el User Pool con atributos personalizados, como el atributo userType, y configura opciones como la verificación por correo electrónico, MFA opcional y ajustes de recuperación de cuenta.
    * **Función en la Infraestructura**: El User Pool de Cognito es esencial para manejar la autenticación y autorización de usuarios en el sistema. Proporciona funcionalidades como registro, inicio de sesión, asegurando que solo usuarios autenticados puedan acceder a recursos protegidos.
 
